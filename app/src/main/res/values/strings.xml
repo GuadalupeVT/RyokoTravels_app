@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Ryoko Travels</string>
+    <string name="name">Ryokō Travels</string>
+    <string name="agencia_de_viajes">Agencia de viajes</string>
+    <string name="skip">Skip</string>
+    <string name="usuario">Usuario</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="btn_Iniciar">Iniciar</string>
+    <string name="login">Iniciar Sesión</string>
+    <string name="registro_user">Registrar Usuario</string>
+    <string name="nombre">Nombre</string>
+    <string name="primerAp">Primer Apellido</string>
+    <string name="segundoAp">Segundo Apellido</string>
+    <string name="correo">Correo</string>
+</resources>
