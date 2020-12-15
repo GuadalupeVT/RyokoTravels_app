@@ -106,12 +106,12 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
             String pass=contraseña.getText().toString().trim();
             String nom=nombre.getText().toString().trim();
             String pap=primerAp.getText().toString().trim();
-            String sas=segundoAp.getText().toString().trim();
+            String sap=segundoAp.getText().toString().trim();
             String tel=telefono.getText().toString().trim();
             String fech=fecha.getText().toString().trim();
 
             //Verificar campos vacios
-            if(user.isEmpty() || pass.isEmpty() || nom.isEmpty() || pap.isEmpty() || sas.isEmpty() || tel.isEmpty() || fech.isEmpty()){
+            if(user.isEmpty() || pass.isEmpty() || nom.isEmpty() || pap.isEmpty() || sap.isEmpty() || tel.isEmpty() || fech.isEmpty()){
                 Toast.makeText(getActivity(), "No deje campos vacios", Toast.LENGTH_LONG).show();
             }else{
                 //Verificacion de correo
@@ -124,6 +124,7 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
                         Toast.makeText(getActivity(), "Por favor, verifique su numero de telefono", Toast.LENGTH_LONG).show();
                     }else{
                         //PAso las verificaciones, manda informacion
+                        peticionPost(user, pass, nom, pap, sap,tel,fech);
                     }
                 }
 
@@ -162,41 +163,55 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
 
 
     public void peticionPost(String user, String pass, String nom, String pap, String sap,String tel,String fech) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://ryokotravelsagencia.000webhostapp.com/API/alta_cliente_usuario.php";
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               // Instantiate the RequestQueue.
+               RequestQueue queue = Volley.newRequestQueue(getActivity());
+               String url = "https://ryokotravelsagencia.000webhostapp.com/API/alta_cliente_usuario.php";
 
-        HashMap params = new HashMap();
-        params.put("email", user);
-        params.put("contraseña", pass);
-        params.put("nombre", nom);
-        params.put("primerAp", pap);
-        params.put("segundoAp", sap);
-        params.put("telefono", tel);
-        params.put("fecha_nac", fech);
-
-
-        JSONObject parametros = new JSONObject(params);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String cadena = response.toString();
-                        Log.i("RESPUESTA", response.toString());
+               HashMap params = new HashMap();
+               params.put("email", user);
+               params.put("contraseña", pass);
+               params.put("nombre", nom);
+               params.put("primerAp", pap);
+               params.put("segundoAp", sap);
+               params.put("telefono", tel);
+               params.put("fecha_nac", fech);
 
 
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), "No se puede iniciar en este momento", Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
+               JSONObject parametros = new JSONObject(params);
 
-        queue.add(jsonObjectRequest);
+               JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros,
+                       new Response.Listener<JSONObject>() {
+                           @Override
+                           public void onResponse(JSONObject response) {
+
+                               String cadena = response.toString();
+                               Log.i("RESPUESTA", response.toString());
+                               try {
+                                   Boolean exito = response.getBoolean("exito");
+                                   String mensaje=response.getString("mensaje");
+                                   Log.i("RESPUESTA 2", exito.toString());
+                                   Log.i("RESPUESTA 3", mensaje);
+                               } catch (JSONException e) {
+                                   e.printStackTrace();
+                               }
+
+                           }
+                       },
+                       new Response.ErrorListener() {
+                           @Override
+                           public void onErrorResponse(VolleyError error) {
+                               Toast.makeText(getContext(), "No se puede iniciar en este momento", Toast.LENGTH_LONG).show();
+                           }
+                       }
+               );
+
+               queue.add(jsonObjectRequest);
+           }
+       }).start();
+
     }
 
 
