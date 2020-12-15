@@ -11,5 +11,7 @@
     <string name="nombre">Nombre</string>
     <string name="primerAp">Primer Apellido</string>
     <string name="segundoAp">Segundo Apellido</string>
-    <string name="correo">Correo</string>
+    <string name="telefono">Telefono</string>
+    <string name="fecha_nac">Fecha de nacimiento</string>
+    <string name="formato_fecha">dd/mm/yyyy</string>
 </resources>
