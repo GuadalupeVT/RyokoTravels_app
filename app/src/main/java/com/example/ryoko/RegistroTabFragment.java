@@ -2,7 +2,9 @@ package com.example.ryoko;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,19 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class RegistroTabFragment extends Fragment implements View.OnClickListener {
     EditText usuario, contraseña, nombre, primerAp, segundoAp, telefono, fecha;
@@ -112,7 +126,7 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
                         //PAso las verificaciones, manda informacion
                     }
                 }
-               
+
             }
 
         }
@@ -145,6 +159,46 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
         recogerFecha.show();
 
     }
+
+
+    public void peticionPost(String user, String pass, String nom, String pap, String sap,String tel,String fech) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = "https://ryokotravelsagencia.000webhostapp.com/API/alta_cliente_usuario.php";
+
+        HashMap params = new HashMap();
+        params.put("email", user);
+        params.put("contraseña", pass);
+        params.put("nombre", nom);
+        params.put("primerAp", pap);
+        params.put("segundoAp", sap);
+        params.put("telefono", tel);
+        params.put("fecha_nac", fech);
+
+
+        JSONObject parametros = new JSONObject(params);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String cadena = response.toString();
+                        Log.i("RESPUESTA", response.toString());
+                        
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getContext(), "No se puede iniciar en este momento", Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        queue.add(jsonObjectRequest);
+    }
+
 
 
 }
