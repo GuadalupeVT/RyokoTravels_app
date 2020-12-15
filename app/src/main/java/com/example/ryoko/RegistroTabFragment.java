@@ -120,7 +120,7 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
                     Toast.makeText(getActivity(), "Por favor, verifique su email", Toast.LENGTH_LONG).show();
                 }else{
                     //Verificacion de telefono
-                    if(telefono.length()==10){
+                    if(telefono.length()!=10){
                         Toast.makeText(getActivity(), "Por favor, verifique su numero de telefono", Toast.LENGTH_LONG).show();
                     }else{
                         //PAso las verificaciones, manda informacion
@@ -184,7 +184,7 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
                     public void onResponse(JSONObject response) {
                         String cadena = response.toString();
                         Log.i("RESPUESTA", response.toString());
-                        
+
 
                     }
                 },
