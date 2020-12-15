@@ -194,6 +194,16 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
                                    String mensaje=response.getString("mensaje");
                                    Log.i("RESPUESTA 2", exito.toString());
                                    Log.i("RESPUESTA 3", mensaje);
+                                   //Mostrar mensaje
+                                   Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
+                                   //Si la respuesta es correcta cambiar de pantalla e iniciar
+                                   if(exito){
+                                       Intent i = new Intent(getActivity(), MenuActivity.class);
+                                       i.putExtra("usuario",user);
+                                       startActivity(i);
+                                       getActivity().finish();
+                                   }
+
                                } catch (JSONException e) {
                                    e.printStackTrace();
                                }
