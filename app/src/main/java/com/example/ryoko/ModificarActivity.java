@@ -19,18 +19,48 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class ModificarActivity extends AppCompatActivity {
-    EditText id_res,fecha_inicio,fecha_fin;
+    EditText id_res,fecha_in,fecha_fn,nom,tp,trans,tt;
     Button btn_cambio;
+
+    private static final String CERO = "0";
+    private static final String BARRA = "/";
+
+    //Calendario para obtener fecha & hora
+    public final Calendar c = Calendar.getInstance();
+
+    //Variables para obtener la fecha
+    final int mes = c.get(Calendar.MONTH);
+    final int dia = c.get(Calendar.DAY_OF_MONTH);
+    final int anio = c.get(Calendar.YEAR);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modificar);
+        id_res=findViewById(R.id.id_res);
+        fecha_in=findViewById(R.id.fecha_in);
+        fecha_fn=findViewById(R.id.fecha_fn);
+        nom=findViewById(R.id.id_nom);
+        tp=findViewById(R.id.id_tp);
+        trans=findViewById(R.id.id_trans);
+        tt=findViewById(R.id.id_tt);
 
         String [] reserva=getIntent().getExtras().getStringArray("usuarios");
+        id_res.setText(reserva[0].toString());
+        fecha_in.setText(reserva[1].toString());
+        fecha_fn.setText(reserva[2].toString());
+        nom.setText(reserva[3]+" "+reserva[4]+ " "+reserva[5]);
+        tp.setText(reserva[6]);
+        trans.setText(reserva[7]+", "+reserva[8]);
+        tt.setText(reserva[9]);
+
+
+
+
     }
 
 
