@@ -1,6 +1,10 @@
 package com.example.ryoko.ui.home;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -102,7 +107,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             if(inicio.isEmpty() || fin.isEmpty() || destn.isEmpty() || tipo.getSelectedItemId()==0){
                 Toast.makeText(getActivity(), "No deje campos vacios", Toast.LENGTH_LONG).show();
             }else{
-
+                peticionPost(inicio,fin, destn,tipo_transporte);
             }
 
 
@@ -163,7 +168,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                     String mensaje=response.getString("mensaje");
                                     Log.i("RESPUESTA 2", exito.toString());
                                     Log.i("RESPUESTA 3", mensaje);
-                                   
+                                    if(exito){
+                                        //Si se inserto
+                                        String id=response.getString("id");
+                                        alert(getActivity(),id);
+                                    }else{
+                                        Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
+                                    }
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -186,5 +197,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    public void alert(Context c, String id) {
+        AlertDialog dialogo = new AlertDialog
+                .Builder(c) // NombreDeTuActividad.this, o getActivity() si es dentro de un fragmento
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Hicieron click en el botón positivo, así que la acción está confirmada
+                    }
+                })
+                .setTitle("Confirmar") // El título
+                .setMessage("Se registro tu reserva con un id: "+id) // El mensaje
+                .create();// No olvides llamar a Create, ¡pues eso crea el AlertDialog!
+        dialogo.show();
+    }
+
+
 
 }
+
