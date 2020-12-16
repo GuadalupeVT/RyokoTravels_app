@@ -1,6 +1,9 @@
 package com.example.ryoko.ui.gallery;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -86,7 +89,19 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         peticionPost(getActivity().getIntent().getExtras().getString("usuario"));
 
 
+        adapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                int posicion = recycler.getChildAdapterPosition(view);
+
+                String cad = datos.get(posicion);
+                String reservas[] = cad.split(",");
+
+                alert(getActivity(),reservas[0],reservas[1],reservas[2]);
+            }
+        });
+        recycler.setAdapter(adapter);
 
 
 
@@ -190,7 +205,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                 params.put("id_cliente", user);
                 params.put("parametro",parametro);
 
-                
+
                 JSONObject parametros = new JSONObject(params);
 
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros,
@@ -230,6 +245,73 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                     e.printStackTrace();
                                 }
 
+
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(getContext(), "No se puede iniciar en este momento", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                );
+
+                queue.add(jsonObjectRequest);
+            }
+        }).start();
+
+    }
+
+    public void alert(Context c, String id, String incio, String fin) {
+        AlertDialog dialogo = new AlertDialog
+                .Builder(c) // NombreDeTuActividad.this, o getActivity() si es dentro de un fragmento
+                .setPositiveButton("Modificar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Hicieron click en el botón positivo, así que la acción está confirmada
+                    }
+                })
+                .setNegativeButton("Elimiar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        eliminar(id);
+                    }
+                })
+                .setTitle("Acción") // El título
+                .setMessage("¿Que deseas hacer con la reservación?") // El mensaje
+                .create();// No olvides llamar a Create, ¡pues eso crea el AlertDialog!
+        dialogo.show();
+    }
+
+
+    public void eliminar(String id) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Instantiate the RequestQueue.
+                RequestQueue queue = Volley.newRequestQueue(getActivity());
+                String url = "https://ryokotravelsagencia.000webhostapp.com/API/baja_reserva.php";
+                HashMap params = new HashMap();
+                params.put("id", id);
+
+
+                JSONObject parametros = new JSONObject(params);
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+
+                                String cadena = response.toString();
+                                Log.i("RESPUESTA", response.toString());
+                                try {
+                                    Boolean exito = response.getBoolean("exito");
+                                    String mensaje=response.getString("mensaje");
+                                    Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
+                                    peticionPost(getActivity().getIntent().getExtras().getString("usuario"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                             }
                         },
