@@ -31,6 +31,7 @@ public class ModificarActivity extends AppCompatActivity implements View.OnClick
 
     private static final String CERO = "0";
     private static final String BARRA = "/";
+    String us;
 
     //Calendario para obtener fecha & hora
     public final Calendar c = Calendar.getInstance();
@@ -47,12 +48,15 @@ public class ModificarActivity extends AppCompatActivity implements View.OnClick
         id_res=findViewById(R.id.id_res);
         fecha_in=findViewById(R.id.fecha_in);
         fecha_fn=findViewById(R.id.fecha_fn);
+        fecha_in.setOnClickListener(this);
+        fecha_fn.setOnClickListener(this);
         nom=findViewById(R.id.id_nom);
         tp=findViewById(R.id.id_tp);
         trans=findViewById(R.id.id_trans);
         tt=findViewById(R.id.id_tt);
 
         String [] reserva=getIntent().getExtras().getStringArray("usuarios");
+        us=getIntent().getExtras().getString("usuario");
         id_res.setText(reserva[0].toString());
         fecha_in.setText(reserva[1].toString());
         fecha_fn.setText(reserva[2].toString());
@@ -61,13 +65,55 @@ public class ModificarActivity extends AppCompatActivity implements View.OnClick
         trans.setText(reserva[7]+", "+reserva[8]);
         tt.setText("$ "+reserva[9]);
 
+        btn_cambio=findViewById(R.id.btn_modificar);
+
 
 
 
     }
 
 
-    public void peticionPost(String id, String inico, String fin) {
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fecha_in) {
+            obtenerFecha(fecha_in);
+        }
+        if (v.getId() == R.id.fecha_fn) {
+            obtenerFecha(fecha_fn);
+        }
+        if(v.getId()==R.id.btn_modificar){
+            peticionPost(id_res.getText().toString(),fecha_in.getText().toString(),fecha_fn.getText().toString(), us);
+        }
+    }
+
+
+    private void obtenerFecha(EditText fecha){
+        DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                //Esta variable lo que realiza es aumentar en uno el mes ya que comienza desde 0 = enero
+                final int mesActual = month + 1;
+                //Formateo el día obtenido: antepone el 0 si son menores de 10
+                String diaFormateado = (dayOfMonth < 10)? CERO + String.valueOf(dayOfMonth):String.valueOf(dayOfMonth);
+                //Formateo el mes obtenido: antepone el 0 si son menores de 10
+                String mesFormateado = (mesActual < 10)? CERO + String.valueOf(mesActual):String.valueOf(mesActual);
+                //Muestro la fecha con el formato deseado
+                fecha.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
+
+
+            }
+            //Estos valores deben ir en ese orden, de lo contrario no mostrara la fecha actual
+            /**
+             *También puede cargar los valores que usted desee
+             */
+        },anio, mes, dia);
+        //Muestro el widget
+        recogerFecha.show();
+    }
+
+    public void peticionPost(String id, String inico, String fin, String us) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -103,6 +149,7 @@ public class ModificarActivity extends AppCompatActivity implements View.OnClick
                                     //Si la respuesta es correcta cambiar de pantalla e iniciar
                                     if(exito){
                                         Intent i = new Intent(getBaseContext(), PrincipalActivity.class);
+                                        i.putExtra("usuario",us);
                                         startActivity(i);
                                         finish();
                                     }
@@ -127,41 +174,9 @@ public class ModificarActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.fecha_in) {
-            obtenerFecha(fecha_in);
-        }
-        if (v.getId() == R.id.fecha_fn) {
-            obtenerFecha(fecha_fn);
-        }
-    }
 
 
-    private void obtenerFecha(EditText fecha){
-        DatePickerDialog recogerFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                //Esta variable lo que realiza es aumentar en uno el mes ya que comienza desde 0 = enero
-                final int mesActual = month + 1;
-                //Formateo el día obtenido: antepone el 0 si son menores de 10
-                String diaFormateado = (dayOfMonth < 10)? CERO + String.valueOf(dayOfMonth):String.valueOf(dayOfMonth);
-                //Formateo el mes obtenido: antepone el 0 si son menores de 10
-                String mesFormateado = (mesActual < 10)? CERO + String.valueOf(mesActual):String.valueOf(mesActual);
-                //Muestro la fecha con el formato deseado
-                fecha.setText(diaFormateado + BARRA + mesFormateado + BARRA + year);
 
 
-            }
-            //Estos valores deben ir en ese orden, de lo contrario no mostrara la fecha actual
-            /**
-             *También puede cargar los valores que usted desee
-             */
-        },anio, mes, dia);
-        //Muestro el widget
-        recogerFecha.show();
-    }
 
-
-    
 }

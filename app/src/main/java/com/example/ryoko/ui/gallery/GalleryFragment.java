@@ -170,6 +170,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                                         public void onClick(DialogInterface dialog, int which) {
                                                             Intent i = new Intent(getActivity(), ModificarActivity.class);
                                                             i.putExtra("usuarios",alumno);
+                                                            i.putExtra("usuario",getActivity().getIntent().getExtras().getString("usuario"));
                                                             startActivity(i);
                                                         }
                                                     })

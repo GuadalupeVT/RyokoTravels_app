@@ -43,4 +43,7 @@
 
     <string name="modificar">Modificar</string>
 
+    <string name="cerrar">¿Esta seguro de Cerrar Sesion?</string>
+    <string name="btn_cerrar">Aceptar</string>
+
 </resources>
