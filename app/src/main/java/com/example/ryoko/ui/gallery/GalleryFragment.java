@@ -89,20 +89,6 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         peticionPost(getActivity().getIntent().getExtras().getString("usuario"));
 
 
-        adapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                int posicion = recycler.getChildAdapterPosition(view);
-
-                String cad = datos.get(posicion);
-                String reservas[] = cad.split(",");
-
-                alert(getActivity(),reservas[0],reservas[1],reservas[2]);
-            }
-        });
-        recycler.setAdapter(adapter);
-
 
 
         galleryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
@@ -148,15 +134,15 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                     String cad = "";
                                     for (int i=0; i<reserva.length();i++){
 
-                                        cadena = reserva.getJSONObject(i).getString("id_Reserva") + "|" +
-                                                 reserva.getJSONObject(i).getString("fecha_inicio") + "|" +
-                                                 reserva.getJSONObject(i).getString("fecha_fin") + "|" +
-                                                 reserva.getJSONObject(i).getString("nombreCliente") + "|" +
-                                                 reserva.getJSONObject(i).getString("primerAp") + "|" +
-                                                 reserva.getJSONObject(i).getString("segundoAp") + "|" +
-                                                 reserva.getJSONObject(i).getString("tipoHabitacion") + "|" +
-                                                 reserva.getJSONObject(i).getString("tipoTransporte") + "|" +
-                                                 reserva.getJSONObject(i).getString("linea") + "|" +
+                                        cadena = reserva.getJSONObject(i).getString("id_Reserva") + "," +
+                                                 reserva.getJSONObject(i).getString("fecha_inicio") + "," +
+                                                 reserva.getJSONObject(i).getString("fecha_fin") + "," +
+                                                 reserva.getJSONObject(i).getString("nombreCliente") + "," +
+                                                 reserva.getJSONObject(i).getString("primerAp") + "," +
+                                                 reserva.getJSONObject(i).getString("segundoAp") + "," +
+                                                 reserva.getJSONObject(i).getString("tipoHabitacion") + "," +
+                                                 reserva.getJSONObject(i).getString("tipoTransporte") + "," +
+                                                 reserva.getJSONObject(i).getString("linea") + "," +
                                                  reserva.getJSONObject(i).getString("total");
 
                                         datos.add(cadena);
@@ -164,7 +150,84 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                     }
 
                                             adapter=new AdaptadorReservas(datos);
-                                            recycler.setAdapter(adapter);
+
+
+
+                                    adapter.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+
+                                            int posicion = recycler.getChildAdapterPosition(view);
+
+                                            String cad = datos.get(posicion);
+                                            String alumno[] = cad.split(",");
+
+                                            AlertDialog dialogo = new AlertDialog
+                                                    .Builder(getActivity()) // NombreDeTuActividad.this, o getActivity() si es dentro de un fragmento
+                                                    .setPositiveButton("Modificar", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            // Hicieron click en el botón positivo, así que la acción está confirmada
+                                                        }
+                                                    })
+                                                    .setNegativeButton("Elimiar", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+
+
+                                                            // Instantiate the RequestQueue.
+                                                            RequestQueue queue = Volley.newRequestQueue(getActivity());
+                                                            String url = "https://ryokotravelsagencia.000webhostapp.com/API/baja_reserva.php";
+                                                            HashMap params = new HashMap();
+                                                           // Toast.makeText(getContext(), alumno[0]+":C", Toast.LENGTH_LONG).show();
+                                                            params.put("id", alumno[0]);
+                                                            Log.i("RESPUESTA", alumno[0]);
+
+
+                                                            JSONObject parametros = new JSONObject(params);
+
+                                                            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, parametros,
+                                                                    new Response.Listener<JSONObject>() {
+                                                                        @Override
+                                                                        public void onResponse(JSONObject response) {
+
+                                                                            String cadena = response.toString();
+                                                                            Log.i("RESPUESTA", response.toString());
+                                                                            try {
+                                                                                Boolean exito = response.getBoolean("exito");
+                                                                                String mensaje=response.getString("mensaje");
+                                                                                Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
+                                                                                recycler.removeAllViewsInLayout();
+                                                                                datos.clear();
+                                                                                peticionPost(getActivity().getIntent().getExtras().getString("usuario"));
+                                                                            } catch (JSONException e) {
+                                                                                e.printStackTrace();
+                                                                            }
+
+                                                                        }
+                                                                    },
+                                                                    new Response.ErrorListener() {
+                                                                        @Override
+                                                                        public void onErrorResponse(VolleyError error) {
+                                                                            Toast.makeText(getContext(), "No se puede iniciar en este momento", Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    }
+                                                            );
+
+                                                            queue.add(jsonObjectRequest);
+
+
+                                                        }
+                                                    })
+                                                    .setTitle("Acción") // El título
+                                                    .setMessage("¿Que deseas hacer con la reservación?") // El mensaje
+                                                    .create();// No olvides llamar a Create, ¡pues eso crea el AlertDialog!
+                                            dialogo.show();
+
+                                        }
+                                    });
+
+                                    recycler.setAdapter(adapter);
 
 
 
@@ -262,9 +325,9 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    public void alert(Context c, String id, String incio, String fin) {
+    public void alert(String id, String incio, String fin) {
         AlertDialog dialogo = new AlertDialog
-                .Builder(c) // NombreDeTuActividad.this, o getActivity() si es dentro de un fragmento
+                .Builder(getActivity()) // NombreDeTuActividad.this, o getActivity() si es dentro de un fragmento
                 .setPositiveButton("Modificar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
