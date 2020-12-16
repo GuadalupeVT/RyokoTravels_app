@@ -25,4 +25,18 @@
     <string name="menu_home">Agregar reserva</string>
     <string name="menu_gallery">Mis reservas</string>
     <string name="menu_slideshow">Cerrar sesión</string>
+
+    <string name="fecha_inicio">Fecha de inicio</string>
+    <string name="fecha_fin">Fecha de fin</string>
+    <string name="destino">Destino</string>
+    <string name="tipo">Tipo de transporte</string>
+
+    <string-array name="tipo_transporte">
+        <item>Selecciona una opción...</item>
+        <item>Avión</item>
+        <item>Camión</item>
+    </string-array>
+
+    <string name="alta_reserva">Revisar disponibilidad</string>
+
 </resources>
