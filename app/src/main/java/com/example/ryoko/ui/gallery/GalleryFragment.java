@@ -63,6 +63,8 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
         recycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
         parametro=root.findViewById(R.id.caja_parametro);
 
+
+
         parametro.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -80,14 +82,10 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        peticionPost(getActivity().getIntent().getExtras().getString("usuario"));
 
 
 
-            }
-        }).start();
 
 
 
@@ -115,7 +113,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                 String url = "https://ryokotravelsagencia.000webhostapp.com/API/consultar_reserva.php";
 
                 HashMap params = new HashMap();
-                params.put("id_Cliente", user);
+                params.put("id_cliente", user);
 
 
 
@@ -134,20 +132,31 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                     String cad = "";
                                     for (int i=0; i<reserva.length();i++){
 
-                                        cadena = reserva.getJSONObject(i).getString("id_reserva") + " | " +
-                                                 reserva.getJSONObject(i).getString("fecha_inicio") + " | " +
-                                                 reserva.getJSONObject(i).getString("fecha_fin") + " | " +
-                                                jsonArray.getJSONObject(i).getString("sa") + "|" +
-                                                jsonArray.getJSONObject(i).getString("e") + "|" +
-                                                jsonArray.getJSONObject(i).getString("s") + "|" +
-                                                jsonArray.getJSONObject(i).getString("c");
+                                        cadena = reserva.getJSONObject(i).getString("id_Reserva") + "|" +
+                                                 reserva.getJSONObject(i).getString("fecha_inicio") + "|" +
+                                                 reserva.getJSONObject(i).getString("fecha_fin") + "|" +
+                                                 reserva.getJSONObject(i).getString("id_Cliente") + "|" +
+                                                 reserva.getJSONObject(i).getString("nombreCliente") + "|" +
+                                                 reserva.getJSONObject(i).getString("primerAp") + "|" +
+                                                 reserva.getJSONObject(i).getString("segundoAp") + "|" +
+                                                 reserva.getJSONObject(i).getString("tipoHabitacion") + "|" +
+                                                 reserva.getJSONObject(i).getString("tipoTransporte") + "|" +
+                                                 reserva.getJSONObject(i).getString("linea") + "|" +
+                                                 reserva.getJSONObject(i).getString("total");
 
                                         datos.add(cadena);
+
                                     }
+
+                                            adapter=new AdaptadorReservas(datos);
+                                            recycler.setAdapter(adapter);
+                                     
+
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
 
                             }
                         },
