@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ryoko.AdaptadorReservas;
+import com.example.ryoko.ModificarActivity;
 import com.example.ryoko.PrincipalActivity;
 import com.example.ryoko.R;
 
@@ -167,7 +168,7 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                                     .setPositiveButton("Modificar", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
-                                                            Intent i = new Intent(getActivity(), Modificar.class);
+                                                            Intent i = new Intent(getActivity(), ModificarActivity.class);
                                                             i.putExtra("usuarios",alumno);
                                                             startActivity(i);
                                                         }

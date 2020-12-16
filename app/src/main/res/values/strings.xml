@@ -41,4 +41,6 @@
     <string name="busqueda">Da clic en alguna</string>
     <string name="Buscar"> ..Buscar</string>
 
+    <string name="modificar">Modificar</string>
+
 </resources>
