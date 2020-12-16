@@ -12,10 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ryoko">
+        <activity android:name=".ModificarActivity"></activity>
         <activity
             android:name=".PrincipalActivity"
             android:label="@string/title_activity_principal"
-            android:theme="@style/Theme.Ryoko.NoActionBar"></activity>
+            android:theme="@style/Theme.Ryoko.NoActionBar" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".IntroductoryActivity">
             <intent-filter>

@@ -167,7 +167,9 @@ public class GalleryFragment extends Fragment implements View.OnClickListener {
                                                     .setPositiveButton("Modificar", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
-                                                            // Hicieron click en el botón positivo, así que la acción está confirmada
+                                                            Intent i = new Intent(getActivity(), Modificar.class);
+                                                            i.putExtra("usuarios",alumno);
+                                                            startActivity(i);
                                                         }
                                                     })
                                                     .setNegativeButton("Elimiar", new DialogInterface.OnClickListener() {
