@@ -38,5 +38,7 @@
     </string-array>
 
     <string name="alta_reserva">Revisar disponibilidad</string>
+    <string name="busqueda">Da clic en alguna</string>
+    <string name="Buscar"> ..Buscar</string>
 
 </resources>
