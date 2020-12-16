@@ -100,7 +100,7 @@ public class LoginTabFragment extends Fragment implements View.OnClickListener {
                                         JSONObject u = usuarios.getJSONObject(i);
                                         Toast.makeText(getActivity(), "Hola"+user, Toast.LENGTH_LONG).show();
                                     }
-                                    Intent i = new Intent(getActivity(), MenuActivity.class);
+                                    Intent i = new Intent(getActivity(), PrincipalActivity.class);
                                     i.putExtra("usuario",user);
                                     startActivity(i);
                                     getActivity().finish();

@@ -198,7 +198,7 @@ public class RegistroTabFragment extends Fragment implements View.OnClickListene
                                    Toast.makeText(getContext(), mensaje, Toast.LENGTH_LONG).show();
                                    //Si la respuesta es correcta cambiar de pantalla e iniciar
                                    if(exito){
-                                       Intent i = new Intent(getActivity(), MenuActivity.class);
+                                       Intent i = new Intent(getActivity(), PrincipalActivity.class);
                                        i.putExtra("usuario",user);
                                        startActivity(i);
                                        getActivity().finish();
